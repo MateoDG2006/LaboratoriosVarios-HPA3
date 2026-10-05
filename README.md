@@ -7,6 +7,7 @@ Aplicación de consola en **C# / .NET 10** que reúne los ejemplos de la prácti
 ```
 Practica28-9-2026/
 ├── Practica28-9-2026.slnx            # Solución (formato .slnx)
+├── setup.ps1                         # Setup automático + verificación de la base y la app
 └── Practica28-9-2026/
     ├── Practica28-9-2026.csproj      # Proyecto (net10.0 + Microsoft.Data.SqlClient)
     ├── Main2.cs                      # Punto de entrada: menú principal
@@ -38,6 +39,28 @@ Practica28-9-2026/
 - **SQL Server** (Express, Developer o LocalDB) con autenticación de Windows
 - Para abrir la solución `.slnx`: Visual Studio 2022 (17.13 o superior) o Visual Studio 2026. También se puede usar solo la CLI de `dotnet`.
 - Para ejecutar los scripts: **SSMS** o **sqlcmd**
+
+## Setup rápido (automático)
+
+Desde la raíz del repositorio, en PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\setup.ps1              # crea la base si no existe
+powershell -ExecutionPolicy Bypass -File .\setup.ps1 -Reiniciar   # la borra y la recrea
+powershell -ExecutionPolicy Bypass -File .\setup.ps1 -Servidor ".\SQLEXPRESS"
+```
+
+El script:
+
+1. Comprueba que `sqlcmd` y `dotnet` estén instalados.
+2. Ejecuta `01_CrearBaseDatos.sql` (o `02_ReiniciarBaseDatos.sql` con `-Reiniciar`).
+3. Verifica que `dbo.productos` tenga las columnas correctas y los 3 productos semilla.
+4. Compila el proyecto.
+5. Hace una prueba de humo: ejecuta el menú con entradas automáticas, inserta 2 productos (opción 2) y prueba el payload `' OR '1'='1` (opción 3). Comprueba que la forma vulnerable devuelve todo y que la parametrizada no devuelve nada.
+
+Al final muestra `[OK]` o `[FALLO]` por cada comprobación. Si algo falla, imprime la salida completa de la aplicación.
+
+Si prefieres hacerlo a mano, sigue los pasos de la siguiente sección.
 
 ## Configuración
 
