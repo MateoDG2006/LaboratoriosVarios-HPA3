@@ -1,0 +1,1 @@
+SELECT * FROM productos WHERE nombre = 'Teclado Gaming'; -- ' AND precio = 0;
